@@ -1,0 +1,51 @@
+server:
+  port: 8080
+spring:
+  data:
+    rest:
+      base-path: /api/query
+  datasource:
+    url: jdbc:hsqldb:mem:test://localhost/axontest?characterEncoding=UTF-8
+    username: SA
+    password: 
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.HSQLDialect
+    hibernate:
+      ddl-auto: create
+      
+shopping-cart-group: carts
+
+axon:
+  amqp:
+    exchange: events
+#  eventhandling:
+#    processors:
+#      carts:
+#        mode: subscribing
+#        source: cartEvents
+
+---
+
+spring:
+  profiles: separated
+shopping-cart-group: carts
+
+axon:
+  amqp:
+    exchange: events
+#  eventhandling:
+#    processors:
+#      carts:
+#        mode: subscribing
+#        source: cartEvents
+
+
+
+
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
