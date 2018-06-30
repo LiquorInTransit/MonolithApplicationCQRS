@@ -118,7 +118,7 @@ public class ShoppingCartAggregate {
 	public void checkout (CheckoutCartCommand command, CheckoutService checkoutService) throws Exception {
 		//First, be sure that there's items in the cart
 		if (this.items.isEmpty())
-			throw new EmptyCartCheckoutException("You cannot checkout with an empty cart");
+			throw new EmptyCartCheckoutException();
 //		checkoutService.prepareForCheckout(items, customerId);
 		//apply(new OrderPlacedEvent(this.id, this.customerId, this.items, command.getAuditEntry()));
 		if (!this.readyToCheckout)
