@@ -76,6 +76,6 @@ public class ShoppingCartController {
 			throw new IllegalArgumentException("You must set a request type");
 				
 		}
-		commandGateway.sendAndWait(command);
+		commandGateway.send(command);
 	}
 }

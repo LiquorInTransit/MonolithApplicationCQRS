@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.axonframework.commandhandling.callbacks.LoggingCallback;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.eventhandling.saga.EndSaga;
 import org.axonframework.eventhandling.saga.SagaEventHandler;
 import org.axonframework.eventhandling.saga.StartSaga;
 import org.axonframework.spring.stereotype.Saga;
@@ -18,7 +19,6 @@ import com.gazorpazorp.orders.command.CreateOrderCommand;
 @Saga
 public class CheckoutSaga {
 	
-	private boolean checkoutStarted = false;
 
 	@Autowired
 	private transient CommandGateway commandGateway;
@@ -26,14 +26,17 @@ public class CheckoutSaga {
 	@StartSaga
 	@SagaEventHandler(associationProperty="aggregateId")
 	public void on (CartCheckedOutEvent event) throws ActiveOrderException {
-		if (checkoutStarted == true)
-			throw new ActiveOrderException();
-		
-		this.checkoutStarted = true;
-//		String orderId = UUID.randomUUID().toString();
-//		associateWith("orderId", orderId);
-//		commandGateway.send(new CreateOrderCommand(orderId, event.getCustomerId(), new Date(), event.getItems(), event.getAuditEntry()), LoggingCallback.INSTANCE);
+		String orderId = UUID.randomUUID().toString();
+		associateWith("orderId", orderId);
+		commandGateway.send(new CreateOrderCommand(orderId, event.getCustomerId(), new Date(), event.getItems(), event.getAuditEntry()), LoggingCallback.INSTANCE);
 	}
+	
+	//TODO: This should be on the order cancelled event, or the order completed event. Should publish the OpenShoppingCartForCheckoutCommand.
+//	@EndSaga
+//	@SagaEventHandler(associationProperty="aggregateId")
+//	public void on (CartOpenedEvent event) {
+//		
+//	}
 	
 	
 

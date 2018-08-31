@@ -21,7 +21,7 @@ public class OrderStatus {
 	
 	public enum Status {
 		CREATED,
-		PAYED,
+		ACTIVE,
 		COMPLETED,
 		CANCELLED;
 	}

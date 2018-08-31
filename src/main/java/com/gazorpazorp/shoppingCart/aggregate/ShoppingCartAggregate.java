@@ -4,12 +4,9 @@ import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
-import org.axonframework.eventhandling.saga.AssociationValue;
-import org.axonframework.eventhandling.saga.SagaRepository;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 
@@ -131,5 +128,15 @@ public class ShoppingCartAggregate {
 	public void on (CartCheckedOutEvent event) {
 		this.readyToCheckout = false;
 	}
+	
+//	@CommandHandler
+//	public void openCart (OpenShoppingCartForCheckoutCommand command) {
+//		apply (new CartOpenedEvent());
+//	}
+//	
+//	@EventSourcingHandler
+//	public void on (CartOpenedEvent event) {
+//		this.readyToCheckout = true;
+//	}
 
 }

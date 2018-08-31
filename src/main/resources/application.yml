@@ -27,6 +27,27 @@ axon:
 #        mode: subscribing
 #        source: cartEvents
 
+security:
+  basic:
+    enabled: false
+  user:
+    name: admin
+    password: admin
+    role: ACTUATOR
+  oauth2:
+    resource:
+      jwt:
+        key-value: |
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0DsrJige51wEhIDatvnq
+          zGlrb+HGZmUCB7UxxoP7m+humK6paRilkpKKXoJeiwrYz2Cx9dLG1Q0IxtOlxPU4
+          RsCjFw3N8hrmuw+R8Fn6d0wAXUFR3EjoyiNaGK++2RaTEsbzK1A1/ea6DKH1UuFB
+          +NL1BQacKtQH3mwe/7ot9uW1axKwb28cqxHBYwxIdK8gQumCrLdwd9d+ZFn6j+7z
+          9VszKolOnmkeo1bOFNGBJ2Vf4b6XQc/uukpSDmV2l2pLMQ/DVLWvU/cl9Wd7S8CQ
+          pIQiKzmnKlbvM18EVDZwb0vcXZenT5yGHZ3GHXEJDzChnRbQtQOjvUvKzPnoBzGx
+          7wIDAQAB
+          -----END PUBLIC KEY-----
+
 ---
 
 spring:

@@ -1,6 +1,7 @@
 package com.gazorpazorp.orders.aggregate;
 
 import static org.axonframework.eventhandling.saga.SagaLifecycle.associateWith;
+import static org.axonframework.eventhandling.saga.SagaLifecycle.end;
 
 import java.util.Date;
 import java.util.UUID;
@@ -26,6 +27,8 @@ public class OrderCreationSaga {
 	
 	private boolean orderCancelled = false;
 	private boolean deliveryCancelled = false;
+	private String orderId;
+	private String shoppingCartId;
 	
 	@Autowired
 	private transient CommandGateway commandGateway;
@@ -34,7 +37,10 @@ public class OrderCreationSaga {
 	@SagaEventHandler(associationProperty="aggregateId")
 	public void on (OrderPlacedEvent event) throws ActiveOrderException {
 		String orderId = UUID.randomUUID().toString();
+		this.shoppingCartId = event.getAggregateId();
+		this.orderId = orderId;
 		associateWith("orderId", orderId);
+		associateWith("shoppingCartId", event.getAggregateId());
 		commandGateway.send(new CreateOrderCommand(orderId, event.getCustomerId(), new Date(), event.getItems(), event.getAuditEntry()), LoggingCallback.INSTANCE);
 	}
 	
@@ -53,9 +59,43 @@ public class OrderCreationSaga {
 //		CreateDeliveryCommand createDeliveryCommand = new CreateDeliveryCommand(event.getAggregateId());
 		commandGateway.send(createPaymentCommand, LoggingCallback.INSTANCE);
 //		commandGateway.send(createDeliveryCommand, LoggingCallback.INSTANCE);
-		
-		
-		Aggregate<OrderAggregate> order = null;
-		
 	}
+	
+//	@SagaEventHandler (associationProperty="aggregateId", keyName="paymentId")
+//	public void on (PaymentVerificationSucceededEvent event) {
+//		MarkOrderAsActiveCommand activeCommand = new MarkOrderAsActiveCommand();
+//		commandGateway.send(activeCommand, LoggingCallback.INSTANCE);
+//	}
+//	
+//	@SagaEventHandler(associationProperty="aggregateId", keyName="paymentId")
+//	public void on (PaymentVerificationDeclinedEvent event) {
+//		MarkOrderAsCancelledCommand cancelledCommand = new MarkOrderAsCancelledCommand();
+//		commandGateway.send(cancelledCommand, LoggingCallback.INSTANCE);
+//	}
+//	
+//	@SagaEventHandler(associationProperty="aggregateId", keyName="orderId")
+//	public void on (OrderCancelledEvent event) {
+//		orderCancelled = true;
+//		if (!deliveryCancelled) {
+//			MarkDeliveryAsCancelledCommand deliveryCancelledCommand = new MarkDeliveryAsCancelledCommand();
+//			commandGateway.send(deliveryCancelledCommand, LoggingCallback.INSTANCE);
+//		} else {
+//			OpenShoppingCartForCheckoutCommand openShoppingCartCommand = new OpenShoppingCartForCheckoutCommand();
+//			commandGateway.send(openShoppingCartCommand, LoggingCallback.INSTANCE);
+//			end();
+//		}
+//	}
+//	
+//	@SagaEventHandler(associationProperty="aggregateId", keyName="deliveryId")
+//	public void on (DeliveryCancelledEvent event) {
+//		deliveryCancelled = true;
+//		if (!orderCancelled) {
+//			MarkOrderAsCancelledCommand cancelledCommand = new MarkOrderAsCancelledCommand();
+//			commandGateway.send(cancelledCommand, LoggingCallback.INSTANCE);
+//		} else {
+//			OpenShoppingCartForCheckoutCommand openShoppingCartCommand = new OpenShoppingCartForCheckoutCommand();
+//			commandGateway.send(openShoppingCartCommand, LoggingCallback.INSTANCE);
+//			end();
+//		}
+//	}
 }

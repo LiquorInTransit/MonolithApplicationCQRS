@@ -15,12 +15,12 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class AxonConfiguration {
 
-	@Bean
-	CommandBus commandBus (TransactionManager transactionManager) {
-		SimpleCommandBus commandBus = new SimpleCommandBus(transactionManager, NoOpMessageMonitor.INSTANCE);
-		commandBus.registerDispatchInterceptor(new BeanValidationInterceptor<>());
-		return commandBus;
-	}
+//	@Bean
+//	CommandBus commandBus (TransactionManager transactionManager) {
+//		SimpleCommandBus commandBus = new SimpleCommandBus(transactionManager, NoOpMessageMonitor.INSTANCE);
+//		commandBus.registerDispatchInterceptor(new BeanValidationInterceptor<>());
+//		return commandBus;
+//	}
 	@Bean
 	public SpringAggregateSnapshotterFactoryBean snapshotterFactoryBean() {
 		return new SpringAggregateSnapshotterFactoryBean();
