@@ -33,7 +33,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import com.gazorpazorp.shoppingCart.aggregate.ShoppingCartAggregate;
 
 @SpringBootApplication(scanBasePackages="com.gazorpazorp")
-@EntityScan(basePackages={"com.gazorpazorp", "org.axonframework.eventsourcing.eventstore.jpa", "org.axonframework.eventhandling.saga.repository.jpa", "org.axonframework.eventhandling.tokenstore.jpa"})
+@EntityScan(basePackages={"com.gazorpazorp", "org.axonframework.eventhandling.saga.repository.jpa", "org.axonframework.eventhandling.tokenstore.jpa"})
 @EnableJpaRepositories("com.gazorpazorp")
 public class MonolithApplicationCQRS {
 	
@@ -48,42 +48,42 @@ public class MonolithApplicationCQRS {
 		SpringApplication.run(MonolithApplicationCQRS.class, args);
 	}
 	
-	@Configuration
-	public static class AmqpConfiguration {
-		
-		@Bean
-		public Exchange eventsExchange () {
-			return ExchangeBuilder.fanoutExchange("events").build();
-		}
-		@Bean
-		public Queue cartsEventsQueue () {
-			return QueueBuilder.durable("cart-events").build();
-		}
-		@Bean
-		public Binding cartsEventsBinding () {
-			return BindingBuilder.bind(cartsEventsQueue()).to(eventsExchange()).with("*").noargs();
-		}
-		
-		@Autowired
-		public void configure (AmqpAdmin admin) {
-			admin.declareExchange(eventsExchange());
-			admin.declareQueue(cartsEventsQueue());
-			admin.declareBinding(cartsEventsBinding());
-		}
-		
+//	@Configuration
+//	public static class AmqpConfiguration {
+//		
 //		@Bean
-//		public SpringAMQPMessageSource cartEvents (Serializer serializer) {
-//			return new SpringAMQPMessageSource(serializer) {
-//				@RabbitListener(queues = "cart-events")
-//				@Override
-//				public void onMessage(Message message, Channel channel) throws Exception {
-//					super.onMessage(message, channel);
-//				}
-//			};
+//		public Exchange eventsExchange () {
+//			return ExchangeBuilder.fanoutExchange("events").build();
 //		}
-		
-		
-		
-
-	}
+//		@Bean
+//		public Queue cartsEventsQueue () {
+//			return QueueBuilder.durable("cart-events").build();
+//		}
+//		@Bean
+//		public Binding cartsEventsBinding () {
+//			return BindingBuilder.bind(cartsEventsQueue()).to(eventsExchange()).with("*").noargs();
+//		}
+//		
+//		@Autowired
+//		public void configure (AmqpAdmin admin) {
+//			admin.declareExchange(eventsExchange());
+//			admin.declareQueue(cartsEventsQueue());
+//			admin.declareBinding(cartsEventsBinding());
+//		}
+//		
+////		@Bean
+////		public SpringAMQPMessageSource cartEvents (Serializer serializer) {
+////			return new SpringAMQPMessageSource(serializer) {
+////				@RabbitListener(queues = "cart-events")
+////				@Override
+////				public void onMessage(Message message, Channel channel) throws Exception {
+////					super.onMessage(message, channel);
+////				}
+////			};
+////		}
+//		
+//		
+//		
+//
+//	}
 }

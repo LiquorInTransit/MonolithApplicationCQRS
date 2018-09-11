@@ -4,8 +4,12 @@ import java.util.UUID;
 
 import org.axonframework.commandhandling.callbacks.LoggingCallback;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.queryhandling.QueryGateway;
+import org.axonframework.queryhandling.SubscriptionQueryResult;
+import org.axonframework.queryhandling.responsetypes.ResponseTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +24,8 @@ import com.gazorpazorp.shoppingCart.command.CheckoutCartCommand;
 import com.gazorpazorp.shoppingCart.command.ClearCartCommand;
 import com.gazorpazorp.shoppingCart.command.CreateCartCommand;
 import com.gazorpazorp.shoppingCart.command.RemoveItemFromCartCommand;
+import com.gazorpazorp.shoppingCart.query.model.FetchCartByIdQuery;
+import com.gazorpazorp.shoppingCart.query.model.ShoppingCartEntity;
 import com.gazorpazorp.shoppingCart.service.CheckoutService;
 import com.gazorpazorp.shoppingCart.web.request.ShoppingCartRequest;
 
@@ -28,6 +34,8 @@ import com.gazorpazorp.shoppingCart.web.request.ShoppingCartRequest;
 public class ShoppingCartController {
 
 	private CommandGateway commandGateway;
+	private QueryGateway queryGateway;
+	
 	private CheckoutService checkoutService;
 	
 	private String getCurrentUser() {
@@ -43,8 +51,9 @@ public class ShoppingCartController {
 	}
 	
 	@Autowired
-	public ShoppingCartController (CommandGateway commandGateway) {
+	public ShoppingCartController (CommandGateway commandGateway, QueryGateway queryGateway) {
 		this.commandGateway = commandGateway;
+		this.queryGateway = queryGateway;
 	}
 	
 	@PostMapping("/cart")
@@ -77,5 +86,14 @@ public class ShoppingCartController {
 				
 		}
 		commandGateway.send(command);
+	}
+	
+	@GetMapping("/cart/{id}")
+	@ResponseStatus(value = HttpStatus.OK)
+	public ShoppingCartEntity getCart (@PathVariable String id) throws Exception {
+		FetchCartByIdQuery query = new FetchCartByIdQuery(id);
+		SubscriptionQueryResult<ShoppingCartEntity, ShoppingCartEntity> result = queryGateway.subscriptionQuery(query, ResponseTypes.instanceOf(ShoppingCartEntity.class), ResponseTypes.instanceOf(ShoppingCartEntity.class));
+		ShoppingCartEntity entity = result.initialResult().block();
+		return entity;
 	}
 }

@@ -13,19 +13,28 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.HSQLDialect
+        enable_lazy_load_no_trans: true
     hibernate:
       ddl-auto: create
       
-shopping-cart-group: carts
+#shopping-cart-group: carts
 
-axon:
-  amqp:
-    exchange: events
+#axon:
+#  amqp:
+#    exchange: events
 #  eventhandling:
 #    processors:
 #      carts:
 #        mode: subscribing
 #        source: cartEvents
+axon:
+  eventhandling:
+    processors:
+      default:
+        mode: tracking
+axoniq:
+  axonhub:
+    servers: localhost
 
 security:
   basic:

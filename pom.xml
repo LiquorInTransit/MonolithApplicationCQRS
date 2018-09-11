@@ -22,7 +22,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<axon.version>3.2.2</axon.version>
+		<axon.version>3.3.3</axon.version>
 		<spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
 		<jwt.version>1.0.9.RELEASE</jwt.version>
 	</properties>
@@ -42,10 +42,20 @@
 			<artifactId>axon-spring-boot-starter</artifactId>
 			<version>${axon.version}</version>
 		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.axonframework</groupId> -->
+<!-- 			<artifactId>axon-amqp</artifactId> -->
+<!-- 			<version>${axon.version}</version> -->
+<!-- 		</dependency> -->
 		<dependency>
-			<groupId>org.axonframework</groupId>
-			<artifactId>axon-amqp</artifactId>
-			<version>${axon.version}</version>
+			<groupId>io.axoniq</groupId>
+			<artifactId>axonhub-spring-boot-autoconfigure</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-core</artifactId>
+			<version>3.1.8.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

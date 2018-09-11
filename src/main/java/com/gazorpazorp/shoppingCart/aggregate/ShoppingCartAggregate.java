@@ -63,10 +63,12 @@ public class ShoppingCartAggregate {
 	 */
 	@CommandHandler
 	public void addItem (AddItemToCartCommand command) {
+		System.out.println("add item event called");
 		apply (new ItemAddedToCartEvent(command.getTargetId(), command.getProductId(), command.getQty(), command.getAuditEntry()));
 	}
 	@EventSourcingHandler
 	public void on (ItemAddedToCartEvent event) throws InsufficientInventoryException {
+		System.out.println("item added event handled");
 		Integer itemQty = items.get(event.getProductId());
 		if (itemQty == null) {
 			items.put(event.getProductId(), event.getQty());

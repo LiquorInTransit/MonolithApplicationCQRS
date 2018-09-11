@@ -12,6 +12,9 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Fetch;
+import org.springframework.data.repository.cdi.Eager;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,5 +46,9 @@ public class ShoppingCartEntity {
 		this.customerId = customerId;
 		this.aggregateVersion = aggregateVersion;
 		items = new HashMap<>();
+	}
+	
+	public ShoppingCartEntity prepareForJSON() {
+		return new ShoppingCartEntity(getId(), getCustomerId(), getVersion(), getAggregateVersion(), getItems());
 	}
 }

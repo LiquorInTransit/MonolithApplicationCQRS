@@ -5,6 +5,7 @@ import java.util.Map;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventsourcing.SequenceNumber;
+import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,7 @@ import com.gazorpazorp.common.events.cart.CartClearedEvent;
 import com.gazorpazorp.common.events.cart.ItemAddedToCartEvent;
 import com.gazorpazorp.common.events.cart.ItemRemovedFromCartEvent;
 import com.gazorpazorp.common.events.cart.ShoppingCartInitiatedEvent;
+import com.gazorpazorp.shoppingCart.query.model.FetchCartByIdQuery;
 import com.gazorpazorp.shoppingCart.query.model.ShoppingCartEntity;
 import com.gazorpazorp.shoppingCart.query.repository.ShoppingCartEntityRepository;
 
@@ -29,6 +31,7 @@ public class ShoppingCartEventHandler {
 	
 	@EventHandler
 	public void handle (ShoppingCartInitiatedEvent event, @SequenceNumber Long aggregateVersion) {
+		System.out.println("new shopping cart");
 		cartRepo.save(new ShoppingCartEntity(event.getAggregateId(), event.getCustomerId(), aggregateVersion));
 	}
 	
@@ -73,6 +76,11 @@ public class ShoppingCartEventHandler {
 		items.clear();
 		cart.setItems(items);
 		cartRepo.save(cart);
+	}
+	
+	@QueryHandler
+	public ShoppingCartEntity handle (FetchCartByIdQuery query) {
+		return cartRepo.getOne(query.getId()).prepareForJSON();
 	}
 	
 //	@EventHandler
